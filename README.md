@@ -12,9 +12,8 @@
 
 El proyecto está desarrollado con:
 
-- PHP 8 o compatible
+- PHP 8.1.10 o compatible
 - MariaDB
-- PDO para la conexión a la base de datos
 - HTML5
 - CSS3
 - Apache (usualmente con Laragon en Windows)
