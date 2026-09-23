@@ -9,9 +9,6 @@
 - Indicar si el producto está disponible o agotado según su cantidad.
 ---
 ## 2. ¿Qué tecnología utiliza?
-
-El proyecto está desarrollado con:
-
 - PHP 8.1.10 o compatible
 - MariaDB
 - HTML5
