@@ -127,12 +127,12 @@ button:hover {
 .boton-eliminar {
     width: auto;
     padding: 7px 10px;
-    background: var(--rojo);
+    background: #b45550;
     font-size: 0.85rem;
 }
 
 .boton-eliminar:hover {
-    background: #8f1d14;
+    background: #9e4742;
 }
 
 .mensaje {
