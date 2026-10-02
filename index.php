@@ -78,6 +78,12 @@ $estado = $_GET['estado'] ?? '';
                 </div>
             <?php endif; ?>
 
+            <?php if ($estado === 'nombre_actualizado'): ?>
+                <div class="mensaje correcto">
+                    Nombre del producto actualizado correctamente.
+                </div>
+            <?php endif; ?>
+
             <?php if ($estado === 'incompleto'): ?>
                 <div class="mensaje error">
                     Debe completar todos los campos.
@@ -96,6 +102,12 @@ $estado = $_GET['estado'] ?? '';
                 </div>
             <?php endif; ?>
 
+            <?php if ($estado === 'nombre_invalido'): ?>
+                <div class="mensaje error">
+                    El nombre es obligatorio y debe tener máximo 60 caracteres.
+                </div>
+            <?php endif; ?>
+
             <form action="guardar.php" method="POST">
                 <div class="campo">
                     <label for="nombre">
@@ -106,7 +118,7 @@ $estado = $_GET['estado'] ?? '';
                         type="text"
                         id="nombre"
                         name="nombre"
-                        maxlength="100"
+                        maxlength="60"
                         placeholder="Ejemplo: Café"
                         required
                     >
@@ -194,6 +206,32 @@ $estado = $_GET['estado'] ?? '';
                                         $producto['nombre']
                                     );
                                     ?>
+
+                                    <form
+                                        class="formulario-fix-nombre"
+                                        action="fix_nombre.php"
+                                        method="POST"
+                                    >
+                                        <input
+                                            type="hidden"
+                                            name="id"
+                                            value="<?php echo (int) $producto['id']; ?>"
+                                        >
+                                        <input
+                                            type="text"
+                                            name="nombre"
+                                            value="<?php echo htmlspecialchars($producto['nombre'], ENT_QUOTES, 'UTF-8'); ?>"
+                                            maxlength="60"
+                                            aria-label="Nuevo nombre para <?php echo htmlspecialchars($producto['nombre'], ENT_QUOTES, 'UTF-8'); ?>"
+                                            required
+                                        >
+                                        <button
+                                            class="boton-fix-nombre"
+                                            type="submit"
+                                        >
+                                            FIX Nombre
+                                        </button>
+                                    </form>
                                 </td>
 
                                 <td>

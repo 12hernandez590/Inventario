@@ -7,12 +7,24 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-$nombre = trim($_POST['nombre'] ?? '');
+$nombreEntrada = $_POST['nombre'] ?? '';
 $cantidad = $_POST['cantidad'] ?? '';
 $precioEntrada = $_POST['precio'] ?? '';
 
+if (!is_string($nombreEntrada)) {
+    header('Location: index.php?estado=nombre_invalido');
+    exit;
+}
+
+$nombre = trim($nombreEntrada);
+
 if ($nombre === '' || $cantidad === '' || $precioEntrada === '') {
     header('Location: index.php?estado=incompleto');
+    exit;
+}
+
+if (!preg_match('/^[^\r\n]{1,60}$/uD', $nombre)) {
+    header('Location: index.php?estado=nombre_invalido');
     exit;
 }
 

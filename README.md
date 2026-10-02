@@ -4,6 +4,7 @@
 
 - Agregar nuevos productos con nombre, cantidad y precio.
 - Corregir el precio de productos registrados.
+- Corregir el nombre de productos registrados.
 - Ver el listado de productos registrados.
 - Mostrar la fecha de registro.
 - Validar que los campos no queden vacíos.
