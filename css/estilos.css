@@ -266,42 +266,6 @@ button:hover {
     margin-bottom: 18px;
 }
 
-.buscador-wrapper {
-    margin: 0 0 18px;
-}
-
-.label-buscador {
-    display: block;
-    margin-bottom: 8px;
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: var(--azul-oscuro);
-}
-
-.buscador {
-    width: 100%;
-    padding: 13px 16px;
-    border: 1px solid #cfe0ff;
-    border-radius: 12px;
-    background: linear-gradient(180deg, #ffffff, #f8fbff);
-    box-shadow: 0 8px 18px rgba(37, 99, 235, 0.08);
-    font: inherit;
-    color: var(--azul-oscuro);
-}
-
-.buscador:focus {
-    border-color: var(--azul-principal);
-    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
-    outline: none;
-}
-
-.resultado-busqueda {
-    margin: 10px 0 0;
-    color: var(--gris-texto);
-    font-size: 0.88rem;
-    font-weight: 600;
-}
-
 .tabla-contenedor {
     overflow-x: auto;
     border: 1px solid var(--borde);
