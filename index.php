@@ -7,6 +7,7 @@ $consulta = $conexion->query(
         id,
         nombre,
         cantidad,
+        precio,
         fecharegistro
     FROM productos
     ORDER BY id asc'
@@ -53,7 +54,7 @@ $estado = $_GET['estado'] ?? '';
             <h2>Registrar producto</h2>
 
             <p class="descripcion">
-                Escriba el nombre del producto y su cantidad.
+                Escriba el nombre, la cantidad y el precio del producto.
             </p>
 
             <?php if ($estado === 'guardado'): ?>
@@ -74,6 +75,18 @@ $estado = $_GET['estado'] ?? '';
                 </div>
             <?php endif; ?>
 
+            <?php if ($estado === 'precio_actualizado'): ?>
+                <div class="mensaje correcto">
+                    Precio corregido correctamente.
+                </div>
+            <?php endif; ?>
+
+            <?php if ($estado === 'nombre_actualizado'): ?>
+                <div class="mensaje correcto">
+                    Nombre del producto actualizado correctamente.
+                </div>
+            <?php endif; ?>
+
             <?php if ($estado === 'incompleto'): ?>
                 <div class="mensaje error">
                     Debe completar todos los campos.
@@ -83,6 +96,18 @@ $estado = $_GET['estado'] ?? '';
             <?php if ($estado === 'cantidad_invalida'): ?>
                 <div class="mensaje error">
                     La cantidad debe ser un número entero igual o mayor que cero.
+                </div>
+            <?php endif; ?>
+
+            <?php if ($estado === 'precio_invalido'): ?>
+                <div class="mensaje error">
+                    El precio debe ser un número positivo con hasta dos decimales.
+                </div>
+            <?php endif; ?>
+
+            <?php if ($estado === 'nombre_invalido'): ?>
+                <div class="mensaje error">
+                    El nombre es obligatorio y debe tener máximo 60 caracteres.
                 </div>
             <?php endif; ?>
 
@@ -96,7 +121,7 @@ $estado = $_GET['estado'] ?? '';
                         type="text"
                         id="nombre"
                         name="nombre"
-                        maxlength="100"
+                        maxlength="60"
                         placeholder="Ejemplo: Café"
                         required
                     >
@@ -112,6 +137,23 @@ $estado = $_GET['estado'] ?? '';
                         id="cantidad"
                         name="cantidad"
                         placeholder="Ejemplo: 10"
+                        required
+                    >
+                </div>
+
+                <div class="campo">
+                    <label for="precio">
+                        Precio
+                    </label>
+
+                    <input
+                        type="number"
+                        id="precio"
+                        name="precio"
+                        min="0"
+                        max="99999999.99"
+                        step="0.01"
+                        placeholder="Ejemplo: 25.50"
                         required
                     >
                 </div>
@@ -158,6 +200,7 @@ $estado = $_GET['estado'] ?? '';
                             <th>ID</th>
                             <th>Producto</th>
                             <th>Cantidad</th>
+                            <th>Precio</th>
                             <th>Estado</th>
                             <th>Fecha</th>
                         </tr>
@@ -166,7 +209,7 @@ $estado = $_GET['estado'] ?? '';
                     <tbody id="tbody-productos">
                         <?php if (count($productos) === 0): ?>
                             <tr>
-                                <td colspan="5" class="sin-registros">
+                                <td colspan="6" class="sin-registros">
                                     No hay productos registrados.
                                 </td>
                             </tr>
@@ -200,6 +243,32 @@ $estado = $_GET['estado'] ?? '';
                                         $producto['nombre']
                                     );
                                     ?>
+
+                                    <form
+                                        class="formulario-fix-nombre"
+                                        action="fix_nombre.php"
+                                        method="POST"
+                                    >
+                                        <input
+                                            type="hidden"
+                                            name="id"
+                                            value="<?php echo (int) $producto['id']; ?>"
+                                        >
+                                        <input
+                                            type="text"
+                                            name="nombre"
+                                            value="<?php echo htmlspecialchars($producto['nombre'], ENT_QUOTES, 'UTF-8'); ?>"
+                                            maxlength="60"
+                                            aria-label="Nuevo nombre para <?php echo htmlspecialchars($producto['nombre'], ENT_QUOTES, 'UTF-8'); ?>"
+                                            required
+                                        >
+                                        <button
+                                            class="boton-fix-nombre"
+                                            type="submit"
+                                        >
+                                            FIX Nombre
+                                        </button>
+                                    </form>
                                 </td>
 
                                 <td>
@@ -229,6 +298,45 @@ $estado = $_GET['estado'] ?? '';
                                             type="submit"
                                         >
                                             Corregir
+                                        </button>
+                                    </form>
+                                </td>
+
+                                <td>
+                                    <?php
+                                    echo number_format(
+                                        (float) $producto['precio'],
+                                        2,
+                                        '.',
+                                        ','
+                                    );
+                                    ?>
+
+                                    <form
+                                        class="formulario-fix-precio"
+                                        action="fix_precio.php"
+                                        method="POST"
+                                    >
+                                        <input
+                                            type="hidden"
+                                            name="id"
+                                            value="<?php echo (int) $producto['id']; ?>"
+                                        >
+                                        <input
+                                            type="number"
+                                            name="precio"
+                                            value="<?php echo number_format((float) $producto['precio'], 2, '.', ''); ?>"
+                                            min="0"
+                                            max="99999999.99"
+                                            step="0.01"
+                                            aria-label="Nuevo precio para <?php echo htmlspecialchars($producto['nombre'], ENT_QUOTES, 'UTF-8'); ?>"
+                                            required
+                                        >
+                                        <button
+                                            class="boton-fix-precio"
+                                            type="submit"
+                                        >
+                                            FIX Precio
                                         </button>
                                     </form>
                                 </td>

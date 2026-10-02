@@ -26,6 +26,7 @@ CREATE TABLE `productos` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `nombre` varchar(60) NOT NULL,
   `cantidad` int(11) NOT NULL,
+  `precio` decimal(10,2) NOT NULL DEFAULT 0.00,
   `fecharegistro` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -37,7 +38,7 @@ CREATE TABLE `productos` (
 
 LOCK TABLES `productos` WRITE;
 /*!40000 ALTER TABLE `productos` DISABLE KEYS */;
-INSERT INTO `productos` VALUES (1,'Refresco',10,'2026-09-13 04:12:33'),(2,'galletas',20,'2026-09-13 04:12:33'),(3,'cereal',5,'2026-09-13 04:12:33');
+INSERT INTO `productos` (`id`, `nombre`, `cantidad`, `precio`, `fecharegistro`) VALUES (1,'Refresco',10,0.00,'2026-09-13 04:12:33'),(2,'galletas',20,0.00,'2026-09-13 04:12:33'),(3,'cereal',5,0.00,'2026-09-13 04:12:33');
 /*!40000 ALTER TABLE `productos` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
