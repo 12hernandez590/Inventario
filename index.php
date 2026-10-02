@@ -68,6 +68,12 @@ $estado = $_GET['estado'] ?? '';
                 </div>
             <?php endif; ?>
 
+            <?php if ($estado === 'cantidad_actualizada'): ?>
+                <div class="mensaje correcto">
+                    Cantidad corregida correctamente.
+                </div>
+            <?php endif; ?>
+
             <?php if ($estado === 'incompleto'): ?>
                 <div class="mensaje error">
                     Debe completar todos los campos.
@@ -76,7 +82,7 @@ $estado = $_GET['estado'] ?? '';
 
             <?php if ($estado === 'cantidad_invalida'): ?>
                 <div class="mensaje error">
-                    La cantidad debe ser un número.
+                    La cantidad debe ser un número entero igual o mayor que cero.
                 </div>
             <?php endif; ?>
 
@@ -164,6 +170,33 @@ $estado = $_GET['estado'] ?? '';
 
                                 <td>
                                     <?php echo $producto['cantidad']; ?>
+
+                                    <form
+                                        class="formulario-fix-correccion"
+                                        action="fix_correccion.php"
+                                        method="POST"
+                                    >
+                                        <input
+                                            type="hidden"
+                                            name="id"
+                                            value="<?php echo (int) $producto['id']; ?>"
+                                        >
+                                        <input
+                                            type="number"
+                                            name="cantidad"
+                                            value="<?php echo (int) $producto['cantidad']; ?>"
+                                            min="0"
+                                            step="1"
+                                            aria-label="Nueva cantidad para <?php echo htmlspecialchars($producto['nombre'], ENT_QUOTES, 'UTF-8'); ?>"
+                                            required
+                                        >
+                                        <button
+                                            class="boton-fix-correccion"
+                                            type="submit"
+                                        >
+                                            Corregir
+                                        </button>
+                                    </form>
                                 </td>
 
                                 <td>
