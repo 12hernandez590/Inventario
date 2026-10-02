@@ -147,6 +147,29 @@ button:hover {
     background: var(--azul-oscuro);
 }
 
+.formulario-fix-precio {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.formulario-fix-precio input {
+    width: 104px;
+    padding: 7px;
+}
+
+.boton-fix-precio {
+    width: auto;
+    padding: 7px 10px;
+    background: var(--turquesa);
+    font-size: 0.85rem;
+}
+
+.boton-fix-precio:hover {
+    background: var(--azul-oscuro);
+}
+
 .boton-eliminar {
     width: auto;
     padding: 7px 10px;

@@ -9,8 +9,9 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 $nombre = trim($_POST['nombre'] ?? '');
 $cantidad = $_POST['cantidad'] ?? '';
+$precioEntrada = $_POST['precio'] ?? '';
 
-if ($nombre === '' || $cantidad === '') {
+if ($nombre === '' || $cantidad === '' || $precioEntrada === '') {
     header('Location: index.php?estado=incompleto');
     exit;
 }
@@ -20,14 +21,32 @@ if (!is_numeric($cantidad)) {
     exit;
 }
 
+if (
+    !is_string($precioEntrada)
+    || !preg_match('/^(?:0|[0-9]{1,8})(?:\.[0-9]{1,2})?$/D', trim($precioEntrada))
+) {
+    header('Location: index.php?estado=precio_invalido');
+    exit;
+}
+
+[$parteEntera, $parteDecimal] = array_pad(
+    explode('.', trim($precioEntrada), 2),
+    2,
+    ''
+);
+$parteEntera = ltrim($parteEntera, '0');
+$parteEntera = $parteEntera === '' ? '0' : $parteEntera;
+$precio = $parteEntera . '.' . str_pad($parteDecimal, 2, '0');
+
 $sentencia = $conexion->prepare(
-    'INSERT INTO productos (nombre, cantidad)
-     VALUES (:nombre, :cantidad)'
+    'INSERT INTO productos (nombre, cantidad, precio)
+     VALUES (:nombre, :cantidad, :precio)'
 );
 
 $sentencia->execute([
     'nombre' => $nombre,
-    'cantidad' => (int) $cantidad
+    'cantidad' => (int) $cantidad,
+    'precio' => $precio
 ]);
 
 header('Location: index.php?estado=guardado');
