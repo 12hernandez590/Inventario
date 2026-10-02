@@ -133,6 +133,24 @@ $estado = $_GET['estado'] ?? '';
                 </div>
             </div>
 
+            <div class="buscador-wrapper">
+                <label class="label-buscador" for="buscar-producto">
+                    Buscar producto
+                </label>
+
+                <input
+                    id="buscar-producto"
+                    class="buscador"
+                    type="text"
+                    placeholder="Busca por nombre, ID, cantidad, estado o fecha..."
+                    aria-label="Buscar productos"
+                >
+
+                <p id="resultado-buscador" class="resultado-busqueda">
+                    Mostrando <?php echo count($productos); ?> de <?php echo count($productos); ?> productos
+                </p>
+            </div>
+
             <div class="tabla-contenedor">
                 <table>
                     <thead>
@@ -145,7 +163,7 @@ $estado = $_GET['estado'] ?? '';
                         </tr>
                     </thead>
 
-                    <tbody>
+                    <tbody id="tbody-productos">
                         <?php if (count($productos) === 0): ?>
                             <tr>
                                 <td colspan="5" class="sin-registros">
@@ -155,7 +173,23 @@ $estado = $_GET['estado'] ?? '';
                         <?php endif; ?>
 
                         <?php foreach ($productos as $producto): ?>
-                            <tr>
+                            <?php
+                            $estadoProducto = (int) $producto['cantidad'] > 0 ? 'disponible' : 'agotado';
+                            $estadoLabel = (int) $producto['cantidad'] > 0 ? 'Disponible' : 'Sin existencia';
+                            $textoBusqueda = strtolower(
+                                trim(
+                                    $producto['id'] . ' ' .
+                                    $producto['nombre'] . ' ' .
+                                    $producto['cantidad'] . ' ' .
+                                    $estadoLabel . ' ' .
+                                    $producto['fecharegistro']
+                                )
+                            );
+                            ?>
+                            <tr
+                                class="fila-producto"
+                                data-busqueda="<?php echo htmlspecialchars($textoBusqueda, ENT_QUOTES, 'UTF-8'); ?>"
+                            >
                                 <td>
                                     <?php echo $producto['id']; ?>
                                 </td>
@@ -246,5 +280,59 @@ $estado = $_GET['estado'] ?? '';
     <footer>
         U1. Planeación del proceso de desarrollo de software
     </footer>
+
+    <script>
+        const buscador = document.getElementById('buscar-producto');
+        const filas = Array.from(document.querySelectorAll('.fila-producto'));
+        const resultadoBuscador = document.getElementById('resultado-buscador');
+
+        const normalizarTexto = (valor) => {
+            return valor
+                .normalize('NFD')
+                .replace(/([\u0300-\u036f])/g, '')
+                .toLowerCase()
+                .trim();
+        };
+
+        const actualizarVista = () => {
+            const termino = normalizarTexto(buscador.value || '');
+            let visibles = 0;
+
+            filas.forEach((fila) => {
+                const texto = normalizarTexto(fila.dataset.busqueda || '');
+                const coincide = !termino || texto.includes(termino);
+                fila.style.display = coincide ? '' : 'none';
+
+                if (coincide) {
+                    visibles += 1;
+                }
+            });
+
+            const total = filas.length;
+            resultadoBuscador.textContent = termino
+                ? `Mostrando ${visibles} de ${total} productos`
+                : `Mostrando ${total} de ${total} productos`;
+
+            const filaSinResultados = document.getElementById('fila-sin-resultados');
+            if (filaSinResultados) {
+                filaSinResultados.remove();
+            }
+
+            if (visibles === 0) {
+                const filaVacia = document.createElement('tr');
+                filaVacia.id = 'fila-sin-resultados';
+                filaVacia.innerHTML = '<td colspan="5" class="sin-registros">No se encontraron productos que coincidan con la búsqueda.</td>';
+                document.getElementById('tbody-productos').appendChild(filaVacia);
+            }
+        };
+
+        let temporizadorBusqueda;
+        buscador.addEventListener('input', () => {
+            clearTimeout(temporizadorBusqueda);
+            temporizadorBusqueda = setTimeout(actualizarVista, 700);
+        });
+
+        actualizarVista();
+    </script>
 </body>
 </html>
