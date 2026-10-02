@@ -2,7 +2,7 @@
 
 $servidor = 'localhost';
 $baseDatos = 'inventario';
-$usuario = 'tu usuario';
+$usuario = 'tu usuario<';
 $contrasena = 'tu contraseña';
 
 try {

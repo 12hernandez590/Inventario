@@ -59,6 +59,12 @@ $estado = $_GET['estado'] ?? '';
                 </div>
             <?php endif; ?>
 
+            <?php if ($estado === 'eliminado'): ?>
+                <div class="mensaje correcto">
+                    Producto eliminado correctamente.
+                </div>
+            <?php endif; ?>
+
             <?php if ($estado === 'incompleto'): ?>
                 <div class="mensaje error">
                     Debe completar todos los campos.
@@ -167,6 +173,25 @@ $estado = $_GET['estado'] ?? '';
                                             Sin existencia
                                         </span>
                                     <?php endif; ?>
+
+                                    <form
+                                        class="formulario-eliminar"
+                                        action="eliminar.php"
+                                        method="POST"
+                                        onsubmit="return confirm('¿Deseas eliminar este producto?');"
+                                    >
+                                        <input
+                                            type="hidden"
+                                            name="id"
+                                            value="<?php echo (int) $producto['id']; ?>"
+                                        >
+                                        <button
+                                            class="boton-eliminar"
+                                            type="submit"
+                                        >
+                                            Eliminar
+                                        </button>
+                                    </form>
                                 </td>
 
                                 <td>
