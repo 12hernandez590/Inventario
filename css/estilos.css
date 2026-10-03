@@ -14,7 +14,8 @@
     --rojo: #dc2626;
     --rojo-claro: #fee2e2;
     --sombra: 0 20px 45px rgba(15, 23, 42, 0.12);
-    --sombra-suave: 0 12px 28px rgba(37, 99, 235, 0.1);
+    --sombra-suave: 0 12px 28px rgba(37, 99, 235, 0.12);
+    --sombra-card: 0 18px 35px rgba(15, 23, 42, 0.08);
 }
 
 * {
@@ -28,9 +29,9 @@ html {
 body {
     margin: 0;
     background:
-        radial-gradient(circle at top left, rgba(37, 99, 235, 0.12), transparent 30%),
-        radial-gradient(circle at bottom right, rgba(20, 184, 166, 0.12), transparent 30%),
-        var(--gris-fondo);
+        radial-gradient(circle at top left, rgba(37, 99, 235, 0.13), transparent 30%),
+        radial-gradient(circle at bottom right, rgba(20, 184, 166, 0.12), transparent 28%),
+        linear-gradient(180deg, #f6f9ff 0%, #eef4ff 100%);
     color: var(--azul-oscuro);
     font-family: 'Inter', Arial, sans-serif;
 }
@@ -38,9 +39,10 @@ body {
 .encabezado {
     position: relative;
     overflow: hidden;
-    padding: 56px 20px 44px;
-    background: linear-gradient(135deg, #0f172a 0%, #1d4ed8 45%, #14b8a6 100%);
+    padding: 56px 20px 52px;
+    background: linear-gradient(135deg, #0f172a 0%, #1d4ed8 46%, #14b8a6 100%);
     color: var(--blanco);
+    box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .encabezado::before,
@@ -53,17 +55,17 @@ body {
 }
 
 .encabezado::before {
-    width: 260px;
-    height: 260px;
-    right: -60px;
-    top: -80px;
+    width: 300px;
+    height: 300px;
+    right: -80px;
+    top: -120px;
 }
 
 .encabezado::after {
-    width: 220px;
-    height: 220px;
-    left: -30px;
-    bottom: -70px;
+    width: 240px;
+    height: 240px;
+    left: -50px;
+    bottom: -90px;
 }
 
 .contenido-encabezado {
@@ -74,10 +76,10 @@ body {
 }
 
 .encabezado h1 {
-    margin: 10px 0 12px;
-    font-size: clamp(2.2rem, 5vw, 3.6rem);
-    letter-spacing: -0.06em;
-    line-height: 1.05;
+    margin: 12px 0 10px;
+    font-size: clamp(2.3rem, 4vw, 4rem);
+    letter-spacing: -0.07em;
+    line-height: 1.02;
 }
 
 .encabezado p {
@@ -91,7 +93,7 @@ body {
     align-items: center;
     gap: 8px;
     padding: 8px 12px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.22);
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.08);
     font-size: 0.78rem;
@@ -111,7 +113,7 @@ body {
 
 .contenedor {
     display: grid;
-    grid-template-columns: 360px 1fr;
+    grid-template-columns: 360px minmax(0, 1fr);
     gap: 24px;
     width: min(1180px, 92%);
     margin: 30px auto 42px;
@@ -120,11 +122,17 @@ body {
 
 .tarjeta {
     padding: 26px;
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.94);
     border: 1px solid rgba(148, 163, 184, 0.18);
     border-radius: 22px;
-    box-shadow: var(--sombra);
+    box-shadow: var(--sombra-card);
     backdrop-filter: blur(10px);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tarjeta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 22px 38px rgba(15, 23, 42, 0.1);
 }
 
 .tarjeta h2 {
@@ -141,7 +149,7 @@ body {
 
 .formulario {
     position: sticky;
-    top: 16px;
+    top: 18px;
 }
 
 .campo {
@@ -159,9 +167,9 @@ label {
 input {
     width: 100%;
     padding: 13px 14px;
-    border: 1px solid #c9d8ef;
+    border: 1px solid #d6e2f6;
     border-radius: 12px;
-    background: var(--blanco);
+    background: linear-gradient(180deg, #ffffff, #f8fbff);
     color: var(--azul-oscuro);
     font: inherit;
     box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.04);
@@ -190,13 +198,13 @@ button {
     font-weight: 700;
     letter-spacing: 0.02em;
     cursor: pointer;
-    box-shadow: var(--sombra-suave);
+    box-shadow: 0 14px 24px rgba(37, 99, 235, 0.18);
     transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
 }
 
 button:hover {
     transform: translateY(-1px);
-    box-shadow: 0 16px 28px rgba(37, 99, 235, 0.18);
+    box-shadow: 0 18px 28px rgba(37, 99, 235, 0.22);
     filter: brightness(1.02);
 }
 
@@ -204,7 +212,9 @@ button:hover {
     margin-top: 10px;
 }
 
-.formulario-fix-nombre {
+.formulario-fix-nombre,
+.formulario-fix-correccion,
+.formulario-fix-precio {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -216,45 +226,9 @@ button:hover {
     padding: 7px;
 }
 
-.boton-fix-nombre {
-    width: auto;
-    padding: 7px 10px;
-    background: var(--turquesa);
-    font-size: 0.85rem;
-}
-
-.boton-fix-nombre:hover {
-    background: var(--azul-oscuro);
-}
-
-.formulario-fix-correccion {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 8px;
-}
-
 .formulario-fix-correccion input {
     width: 88px;
     padding: 7px;
-}
-
-.boton-fix-correccion {
-    width: auto;
-    padding: 7px 10px;
-    background: var(--turquesa);
-    font-size: 0.85rem;
-}
-
-.boton-fix-correccion:hover {
-    background: var(--azul-oscuro);
-}
-
-.formulario-fix-precio {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 8px;
 }
 
 .formulario-fix-precio input {
@@ -262,15 +236,20 @@ button:hover {
     padding: 7px;
 }
 
+.boton-fix-nombre,
+.boton-fix-correccion,
 .boton-fix-precio {
     width: auto;
     padding: 7px 10px;
-    background: var(--turquesa);
+    background: linear-gradient(135deg, var(--turquesa), #0ea5a4);
     font-size: 0.85rem;
+    box-shadow: 0 10px 16px rgba(20, 184, 166, 0.16);
 }
 
+.boton-fix-nombre:hover,
+.boton-fix-correccion:hover,
 .boton-fix-precio:hover {
-    background: var(--azul-oscuro);
+    background: linear-gradient(135deg, #0f766e, #0f172a);
 }
 
 .boton-eliminar {
@@ -279,6 +258,7 @@ button:hover {
     background: linear-gradient(135deg, #ef4444 0%, var(--rojo) 100%);
     font-size: 0.8rem;
     border-radius: 10px;
+    box-shadow: 0 10px 16px rgba(239, 68, 68, 0.18);
 }
 
 .boton-eliminar:hover {
@@ -351,8 +331,9 @@ button:hover {
 .tabla-contenedor {
     overflow-x: auto;
     border: 1px solid var(--borde);
-    border-radius: 16px;
-    background: linear-gradient(180deg, rgba(239, 246, 255, 0.4), rgba(255, 255, 255, 0.8));
+    border-radius: 18px;
+    background: linear-gradient(180deg, rgba(239, 246, 255, 0.42), rgba(255, 255, 255, 0.85));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
 }
 
 table {
@@ -370,6 +351,9 @@ td {
 }
 
 th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
     background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
     color: rgba(255, 255, 255, 0.95);
     font-size: 0.8rem;
@@ -379,7 +363,7 @@ th {
 }
 
 tbody tr {
-    transition: background 0.2s ease;
+    transition: background 0.2s ease, transform 0.2s ease;
 }
 
 tbody tr:hover {
@@ -395,17 +379,17 @@ tbody tr:last-child td {
     padding: 7px 10px;
     border-radius: 999px;
     font-size: 0.8rem;
-    font-weight: 700;
+    font-weight: 800;
     letter-spacing: 0.02em;
 }
 
 .disponible {
-    background: var(--verde-claro);
+    background: linear-gradient(135deg, #dffdf7, #c7f9ea);
     color: var(--verde);
 }
 
 .agotado {
-    background: var(--rojo-claro);
+    background: linear-gradient(135deg, #fee2e2, #fecaca);
     color: var(--rojo);
 }
 
@@ -445,5 +429,11 @@ footer {
     th,
     td {
         padding: 12px 10px;
+    }
+
+    .formulario-fix-nombre,
+    .formulario-fix-correccion,
+    .formulario-fix-precio {
+        flex-wrap: wrap;
     }
 }
