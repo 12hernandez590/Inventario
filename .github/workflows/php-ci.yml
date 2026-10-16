@@ -1,10 +1,11 @@
+
 name: Pruebas automatizadas - Inventario
 
 on:
   push:
     branches:
       - main
-
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -17,16 +18,16 @@ jobs:
       - name: Descargar código
         uses: actions/checkout@v4
 
-
       - name: Configurar PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
-        
+
       - name: Verificar sintaxis
         run: |
           php -l src/validaciones.php
           php -l tests/test_validaciones.php
 
       - name: Ejecutar pruebas
-        run: php tests/test_validaciones.php
+        run: |
+          php -d display_errors=1 -d error_reporting=E_ALL tests/test_validaciones.php
