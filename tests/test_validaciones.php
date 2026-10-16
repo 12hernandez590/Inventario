@@ -1,22 +1,44 @@
+
 <?php
 
-function validarNombreProducto(string $nombre): bool
-{
-    //$nombre = trim($nombre);
+require_once __DIR__ . '/../src/validaciones.php';
 
-    return mb_strlen($nombre, 'UTF-8') >= 3
-        && mb_strlen($nombre, 'UTF-8') <= 50;
-}
+$correctas = 0;
+$total = 0;
 
-function validarCantidadProducto($cantidad): bool
+function probar(string $nombre, bool $esperado, bool $obtenido): void
 {
-    if (!is_int($cantidad) && !is_string($cantidad)) {
-        return false;
+    global $correctas, $total;
+
+    $total++;
+
+    if ($esperado === $obtenido) {
+        $correctas++;
+        echo "[OK] $nombre\n";
+    } else {
+        echo "[ERROR] $nombre"
+            . " | Esperado: " . ($esperado ? 'true' : 'false')
+            . " | Obtenido: " . ($obtenido ? 'true' : 'false')
+            . "\n";
     }
-
-    return filter_var(
-        $cantidad,
-        FILTER_VALIDATE_INT,
-        ['options' => ['min_range' => 0]]
-    ) !== false;
 }
+
+echo "=== PRUEBAS DE VALIDACIONES ===\n\n";
+
+probar("Nombre valido", true, validarNombreProducto("Teclado"));
+probar("Nombre corto", false, validarNombreProducto("AB"));
+probar("Nombre vacio", false, validarNombreProducto(""));
+probar("Cantidad positiva", true, validarCantidadProducto(5));
+probar("Cantidad cero", true, validarCantidadProducto(0));
+probar("Cantidad negativa", false, validarCantidadProducto(-3));
+probar("Cantidad decimal", false, validarCantidadProducto(2.5));
+probar("Cantidad con letras", false, validarCantidadProducto("abc"));
+
+echo "\nResultado: $correctas de $total pruebas correctas.\n";
+
+if ($correctas !== $total) {
+    echo "Hay pruebas que fallaron.\n";
+    exit(1);
+}
+
+echo "Todas las pruebas pasaron correctamente.\n";
