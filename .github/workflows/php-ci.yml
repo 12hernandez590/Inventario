@@ -1,25 +1,33 @@
-@'
-name: PHP CI
+
+name: Pruebas automatizadas - Inventario
 
 on:
   push:
-    branches: [ "**" ]
-  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
-  test:
+  pruebas:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Descargar código
+        uses: actions/checkout@v4
 
       - name: Configurar PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
 
-      - name: Revisar sintaxis
-        run: find . -name "*.php" -not -path "./vendor/*" -print0 | xargs -0 -n1 php -l
+      - name: Verificar sintaxis
+        run: |
+          php -l src/validaciones.php
+          php -l tests/test_validaciones.php
 
       - name: Ejecutar pruebas
-        run: php tests/test_validaciones.php
-'@ | Set-Content .github\workflows\php-ci.yml
+        run: |
+          php -d display_errors=1 -d error_reporting=E_ALL tests/test_validaciones.php

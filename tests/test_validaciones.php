@@ -26,6 +26,7 @@ function probar(string $nombre, bool $esperado, bool $obtenido): void
 echo "=== PRUEBAS DE VALIDACIONES ===\n\n";
 
 probar("Nombre valido", true, validarNombreProducto("Teclado"));
+probar("Nombre corto", false, validarNombreProducto("AB"));
 probar("Nombre vacio", false, validarNombreProducto(""));
 probar("Cantidad positiva", true, validarCantidadProducto(5));
 probar("Cantidad cero", true, validarCantidadProducto(0));
