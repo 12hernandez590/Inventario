@@ -1,44 +1,71 @@
-
 <?php
 
 require_once __DIR__ . '/../src/validaciones.php';
 
+// PRUEBAS PARA EL NOMBRE DEL PRODUCTO
+$casosNombre = [
+    ["nombre válido: Teclado", "Teclado", true],
+    ["nombre vacío", "", false],
+    ["nombre con espacios", "  ", false],
+    ["nombre válido: Mouse", "Mouse", true],
+    ["nombre válido: Monitor", "Monitor", true]
+];
+
+// PRUEBAS PARA LA CANTIDAD DEL PRODUCTO
+$casosCantidad = [
+    ["cantidad válida: 10", "10", true],
+    ["cantidad válida: 1", "1", true],
+    ["cantidad vacía", "", false],
+    ["cantidad con espacios", "  ", false],
+    ["cantidad cero", "0", false],
+    ["cantidad negativa", "-5", false],
+    ["cantidad con letras", "abc", false],
+    ["cantidad decimal", "2.5", false]
+];
+
 $correctas = 0;
-$total = 0;
+$fallidas = 0;
 
-function probar(string $nombre, bool $esperado, bool $obtenido): void
-{
-    global $correctas, $total;
 
-    $total++;
+echo "\n----- PRUEBAS DE NOMBRE -----\n";
 
-    if ($esperado === $obtenido) {
+foreach ($casosNombre as [$descripcion, $entrada, $esperado]) {
+
+    $obtenido = validarNombreProducto($entrada);
+
+    if ($obtenido === $esperado) {
+        echo "PASS - $descripcion\n";
         $correctas++;
-        echo "[OK] $nombre\n";
     } else {
-        echo "[ERROR] $nombre"
-            . " | Esperado: " . ($esperado ? 'true' : 'false')
-            . " | Obtenido: " . ($obtenido ? 'true' : 'false')
-            . "\n";
+        echo "FAIL - $descripcion\n";
+        echo " Esperado: " . var_export($esperado, true) . "\n";
+        echo " Obtenido: " . var_export($obtenido, true) . "\n";
+        $fallidas++;
     }
 }
 
-echo "=== PRUEBAS DE VALIDACIONES ===\n\n";
 
-probar("Nombre valido", true, validarNombreProducto("Teclado"));
-probar("Nombre corto", false, validarNombreProducto("AB"));
-probar("Nombre vacio", false, validarNombreProducto(""));
-probar("Cantidad positiva", true, validarCantidadProducto(5));
-probar("Cantidad cero", true, validarCantidadProducto(0));
-probar("Cantidad negativa", false, validarCantidadProducto(-3));
-probar("Cantidad decimal", false, validarCantidadProducto(2.5));
-probar("Cantidad con letras", false, validarCantidadProducto("abc"));
+echo "\n----- PRUEBAS DE CANTIDAD -----\n";
 
-echo "\nResultado: $correctas de $total pruebas correctas.\n";
+foreach ($casosCantidad as [$descripcion, $entrada, $esperado]) {
 
-if ($correctas !== $total) {
-    echo "Hay pruebas que fallaron.\n";
-    exit(1);
+    $obtenido = validarCantidadProducto($entrada);
+
+    if ($obtenido === $esperado) {
+        echo "PASS - $descripcion\n";
+        $correctas++;
+    } else {
+        echo "FAIL - $descripcion\n";
+        echo " Esperado: " . var_export($esperado, true) . "\n";
+        echo " Obtenido: " . var_export($obtenido, true) . "\n";
+        $fallidas++;
+    }
 }
 
-echo "Todas las pruebas pasaron correctamente.\n";
+// RESUMEN GENERAL
+echo "\n------- RESUMEN -------\n";
+echo "Total: " . (count($casosNombre) + count($casosCantidad)) . "\n";
+echo "Correctas: $correctas\n";
+echo "Fallidas: $fallidas\n";
+
+exit($fallidas > 0 ? 1 : 0);

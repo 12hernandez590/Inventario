@@ -1,65 +1,57 @@
+
 <?php
 
 require_once __DIR__ . '/config/conexion.php';
+require_once __DIR__ . '/src/validaciones.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: index.php');
     exit;
 }
 
-$nombreEntrada = $_POST['nombre'] ?? '';
+//Obtener los datos del formulario
+$nombre = $_POST['nombre'] ?? '';
 $cantidad = $_POST['cantidad'] ?? '';
-$precioEntrada = $_POST['precio'] ?? '';
 
-if (!is_string($nombreEntrada)) {
-    header('Location: index.php?estado=nombre_invalido');
-    exit;
-}
-
-$nombre = trim($nombreEntrada);
-
-if ($nombre === '' || $cantidad === '' || $precioEntrada === '') {
+// Comprobar que los datos tengan el tipo esperado
+if (!is_string($nombre) || !is_string($cantidad)) {
     header('Location: index.php?estado=incompleto');
     exit;
 }
 
-if (!preg_match('/^[^\r\n]{1,60}$/uD', $nombre)) {
+// Eliminar espacios innecesarios
+$nombre = trim($nombre);
+$cantidad = trim($cantidad);
+
+// Verificar campos vacíos
+if ($nombre === '' || $cantidad === '') {
+    header('Location: index.php?estado=incompleto');
+    exit;
+}
+
+// Validar el nombre del producto
+if (!validarNombreProducto($nombre)) {
     header('Location: index.php?estado=nombre_invalido');
     exit;
 }
 
-if (!is_numeric($cantidad)) {
+// Validar la cantidad
+if (!validarCantidadProducto($cantidad)) {
     header('Location: index.php?estado=cantidad_invalida');
     exit;
 }
 
-if (
-    !is_string($precioEntrada)
-    || !preg_match('/^(?:0|[0-9]{1,8})(?:\.[0-9]{1,2})?$/D', trim($precioEntrada))
-) {
-    header('Location: index.php?estado=precio_invalido');
-    exit;
-}
-
-[$parteEntera, $parteDecimal] = array_pad(
-    explode('.', trim($precioEntrada), 2),
-    2,
-    ''
-);
-$parteEntera = ltrim($parteEntera, '0');
-$parteEntera = $parteEntera === '' ? '0' : $parteEntera;
-$precio = $parteEntera . '.' . str_pad($parteDecimal, 2, '0');
-
+// Guardar en la base de datos
 $sentencia = $conexion->prepare(
-    'INSERT INTO productos (nombre, cantidad, precio)
-     VALUES (:nombre, :cantidad, :precio)'
+    'INSERT INTO productos (nombre, cantidad)
+     VALUES (:nombre, :cantidad)'
 );
 
 $sentencia->execute([
     'nombre' => $nombre,
-    'cantidad' => (int) $cantidad,
-    'precio' => $precio
+    'cantidad' => (int) $cantidad
 ]);
 
+// Regresar al formulario
 header('Location: index.php?estado=guardado');
 exit;
