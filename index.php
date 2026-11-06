@@ -80,6 +80,12 @@ $estado = $_GET['estado'] ?? '';
                 </div>
             <?php endif; ?>
 
+            <?php if ($estado === 'nombre_invalido'): ?>
+                <div class="mensaje error">
+                    El nombre debe tener entre 1 y 60 caracteres.
+                </div>
+            <?php endif; ?>
+
             <?php if ($estado === 'cantidad_invalida'): ?>
                 <div class="mensaje error">
                     La cantidad debe ser un número entero igual o mayor que cero.
@@ -96,7 +102,7 @@ $estado = $_GET['estado'] ?? '';
                         type="text"
                         id="nombre"
                         name="nombre"
-                        maxlength="100"
+                        maxlength="60"
                         placeholder="Ejemplo: Café"
                         required
                     >

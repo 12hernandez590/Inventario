@@ -25,3 +25,18 @@
 -Clonar o copiar el proyecto
 -Crear la base de datos
 -Configurar la conexión
+
+## 5. Pruebas automatizadas
+
+Las pruebas unitarias de validación pueden ejecutarse con:
+
+```sh
+php tests/test_validaciones.php
+```
+
+La prueba de integración requiere una base MySQL/MariaDB llamada
+`inventariopruebas`, la tabla definida en `tests/estructura_pruebas.sql` y
+las variables `DB_HOST`, `DB_NAME`, `DB_USER` y `DB_PASSWORD`. La prueba
+inserta y consulta un producto dentro de una transacción que luego revierte.
+GitHub Actions ejecuta ambas pruebas automáticamente en cada push y en
+solicitudes de cambio hacia `main`.
